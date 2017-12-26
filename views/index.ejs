@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+        #left{
+            float:left;
+            width: 200px;
+            background:#eee;
+            height: 430px;
+        }
+        #right{
+            float:left;
+            padding-left:20px;
+        }
+        tbody>tr{
+            height: 50px;
+        }
+        h5 span{
+            display:block;
+            width: 25px;
+            height: 25px;
+            background:#eee;
+            margin-left:10px;
+            float:left;
+            text-align:center;
+            line-height:25px;
+        }
+        td,th{
+            width: 150px;
+            text-align:center;
+        }
+        td{
+            font-size:12px;
+        }
+        ul>li{
+            height:60px;
+            line-height:60px;
+        }
+    </style>
+</head>
+<body>
+    <div id='box'>
+        <div id='left'>
+            <h3>zs</h3>
+            <ul>
+                <li>快捷添加用户</li>
+                <li>报表管理</li>
+                <li>目录管理</li>
+                <li>用户管理</li>
+            </ul>
+        </div>
+        <div id='right'>
+            <h3>报表管理</h3>
+            <p>报表名称：<input type="text" /><button>搜索</button></p>
+            <p>发布状态：<input type="text" />主题：<input type="text" id='text1'/><button id='btn'>查询</button></p>
+            表表列表  批量移至 <input type="text" name="" id='text1'><button style="margin-left:230px">创建新报表</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>主题</th>
+                        <th>状态</th>
+                        <th>创建人</th>
+                        <th>创建时间/最后修改时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id='lib'>
+                    <%data1.forEach(file =>{%>
+                        <tr>
+                            <td><%=file.name%></td>
+                            <td><%=file.tit%></td>
+                            <td><%=file.zt%></td>
+                            <td><%=file.new%></td>
+                            <td>
+                                <a><%=file.time%></a>
+                                <b><%=file.end%></b>
+                             </td>
+                            <td id='td'>
+                                <span><%=file.cz%></span>
+                                <span><%=file.yl%></span>
+                                <span><%=file.bj%></span>
+                                <strong style="color:red;" id='remove' data-id='<%=file.id%>'><%=file.sc%></strong>
+                            </td>
+                        </tr>
+                    <%})%>
+                </tbody>
+            </table>
+            <h5 id='hh'>
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>4</span>
+                <span>5</span>
+            </h5>
+        </div>
+    </div>
+    <script src='jquery.js'></script>
+    <script>
+        //输入input框值，点击搜索显示对应的内容
+        //req.query.tit=家长服务
+        //req.query.tit=自主服务
+        btn.onclick=function(){
+            lib.innerHTML='';
+            $.ajax({
+                url:'/getOut?tit='+$('#text1').val(),
+                success:function(d){
+                    var arr=d.data2;
+                    text(arr)
+                }
+            })
+        }
+
+        //删除
+        var strong=document.querySelectorAll('strong');
+        for(var i=0;i<strong.length;i++){
+            strong[i].onclick=function(){
+                $.ajax({
+                    url:'/Gets?id='+$(this).data('id'),
+                    success:function(d){
+
+                    }
+                })
+            }
+        }
+
+        //点击下面按钮显示对应的内容
+        var h5=document.querySelector('h5');
+        var span=h5.querySelectorAll('span');
+        for(let i=0;i<span.length;i++){
+            span[i].onclick=function(){
+                alert(i)
+                $.ajax({
+                    url:'/getNum?num='+(i+1),
+                    success:function(d){
+                        var arr=d.data3;
+                        text(arr)
+                    }
+                })
+            }
+        }
+
+        function text(arr){
+            var newArr='';
+            for(var i=0;i<arr.length;i++){
+                newArr+=`
+                    <tr>
+                        <td>${arr[i].name}</td>
+                        <td>${arr[i].tit}</td>
+                        <td>${arr[i].zt}</td>
+                        <td>${arr[i].new}</td>
+                        <td>
+                            <a>${arr[i].time}</a>
+                            <b>${arr[i].end}</b>
+                         </td>
+                        <td id="td">
+                            <span>${arr[i].cz}</span>
+                            <span>${arr[i].yl}</span>
+                            <span>${arr[i].bj}</span>
+                            <strong style="color:red" id='remove' data-id=${arr[i].id}>${arr[i].sc}</strong>
+                        </td>
+                    </tr>
+                `
+            }
+            lib.innerHTML=newArr;
+        }
+    </script>
+</body>
+</html>

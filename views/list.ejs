@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+</head>
+<body>
+    <h3>学而思培优数据平台</h3>
+    <input type="text" id='user'/><br/>
+    <input type="password" id='pwd'/><br/>
+    <button id='login'>登录</button>
+    <script src='jquery.js'></script>
+    <script>
+        login.onclick=function(){
+            $.ajax({
+                url:'/getData?user=zs&&pwd=123',
+                success:function(d){
+                    for(var i=0;i<d.data.length;i++){
+                        if(user.value===d.data[i].user&&pwd.value===d.data[i].pwd){
+                            alert('登录成功')
+                            location.href='index'
+                        }
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>
